@@ -5,42 +5,32 @@ def input_students
   #getting the first name
   name = gets.chomp
   #while the name is not empty; repeat this code
-  puts "please enter the student's country of origin !".center(150)
-  country = gets.chomp
-  puts "please input the students cohort".center(150)
-  cohort = gets.chomp
-  require 'date'
-  if Date::MONTHNAMES.include?(cohort&&cohort.capitalize)
-    cohort.to_sym
-  else
-    puts "that is an invalid date, we have automaticlly selected the nearest cohort available".center(150)
-    cohort = :november
-  end
+ 
   
   while !name.empty? do
     #add the student hash to the array
+     puts "please enter the student's country of origin !".center(150)
+     country = gets.chomp
+     puts "please input the students cohort".center(150)
+     cohort = gets.chomp
+     require 'date'
+    if Date::MONTHNAMES.include?(cohort&&cohort.capitalize)
+     cohort.to_sym
+    else
+     puts "that is an invalid date, we have automaticlly selected the nearest cohort available".center(150)
+     cohort = :november
+    end
     students << {name: name, country: country, cohort: cohort}
     puts "Now we have #{students.count} students".center(150)
     puts "would you like to add another student? answer with yes or no".center(150)
     answer = gets.chomp
     if answer == "yes"
-      puts "student name? Remember you can cancel by hitting enter twice !".center(150)
-      name = gets.chomp
-      puts "country of origin?".center(150)
-      country = gets.chomp
-      puts "cohort selected?".center(150)
-      cohort = gets.chomp
-      require 'date'
-      if Date::MONTHNAMES.include?(cohort&&cohort.capitalize)
-        cohort.to_sym
-      else
-        puts "that is an invalid date, we have automaticlly selected the nearest date for you".center(150)
-        cohort = :november
-      end
+    puts "what's the next students name?".center(150)
+    name = gets.chomp
     elsif answer == "no"
       break
-     end
-end
+    end
+  end
  students
 end
  
@@ -52,10 +42,16 @@ puts "---------------------".center(150)
 end
 
 def print(students)
-students.each do |student|
-  puts "#{student[:name]} from #{student[:country]} (#{student[:cohort]} cohort)".center(150)
+  cohort_list = students.group_by {|input| input[:cohort]}
+  puts "Cohort list".center(150)
+  cohort_list.map do |k, v|
+  puts "#{k}".center(150)
+  for index in 0..v.size-1 do
+  puts "#{index+1}. #{v[index][:name]} from #{v[index][:country]}".center(150)
+    end
+  end
 end
-end
+
 
 def print_footer(names)
 puts "Overall, we have #{names.count} great students".center(150)
@@ -65,3 +61,4 @@ end
   print_header
   print(students)
   print_footer(students)
+  
